@@ -43,3 +43,37 @@ The user must provide their own data in two parts:
 
 **A. Raw Count Data:**
 Place your 10x Genomics `filtered_feature_bc_matrix` directories inside the `/data` folder. The structure should be:
+
+data/
+├── [Sample_1_Folder_Name]/
+│ └── filtered_feature_bc_matrix/
+│ ├── barcodes.tsv.gz
+│ ├── features.tsv.gz
+│ └── matrix.mtx.gz
+├── [Sample_2_Folder_Name]/
+│ └── ...
+└── ...
+
+
+**B. Metadata File:**
+Create a CSV file and place it in the `/metadata` directory. An example `sample_metadata.csv` is provided. The file **must** have the following columns:
+-   `Library ID`: The exact name of the sample folder in the `/data` directory.
+-   `Sample ID`: A unique identifier for the sample/patient.
+-   `Condition`: A column describing the biological group (e.g., 'Disease', 'Control', 'Treatment', 'Pre-treatment').
+
+### 2. Configuration
+
+Before running, you must configure the key parameters at the top of the `scripts/01_process_and_integrate.py` and `scripts/02_identify_and_characterize.py` files. This includes setting the metadata file path, the condition column name, the "case" vs "control" labels, and the gene signature for your disease of interest.
+
+### 3. Running the Pipeline
+
+Execute the scripts from the main `scDiscover_Pipeline/` directory in order.
+
+**Script 1: Process and Integrate**
+This script reads all raw data, performs QC, integrates the samples, performs clustering, and saves a final, processed AnnData object.
+
+```bash
+python scripts/01_process_and_integrate.py
+
+Output: results/processed_data/final_integrated_with_raw.h5ad
+
