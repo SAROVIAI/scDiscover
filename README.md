@@ -1,11 +1,9 @@
----
 
-# **scDiscover: A Python Pipeline for Single-Cell Biomarker Analysis**
+**scDiscover: A Python Pipeline for Single-Cell Biomarker Analysis**
 
 **Version:** 1.0.0
 **Contact:** SAROVI Sp. z o.o — [hello@sarovi.pl](mailto:hello@sarovi.pl)
 
----
 
 ## Overview
 
