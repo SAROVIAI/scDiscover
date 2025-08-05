@@ -1,103 +1,154 @@
-# scDiscover: A Python Pipeline for Single-Cell Biomarker Analysis
+---
+
+# **scDiscover: A Python Pipeline for Single-Cell Biomarker Analysis**
 
 **Version:** 1.0.0
-**Contact:** SAROVI Sp. z o.o - hello@sarovi.pl
+**Contact:** SAROVI Sp. z o.o — [hello@sarovi.pl](mailto:hello@sarovi.pl)
+
+---
 
 ## Overview
 
-**scDiscover** is an end-to-end bioinformatics pipeline for the analysis of single-cell RNA sequencing data. It is designed to process raw 10x Genomics count data from multiple samples, identify cell populations of interest associated with a specific biological condition (e.g., disease vs. healthy), and perform deep characterization using pathway and cell-cell communication analysis.
+**scDiscover** is an end-to-end, reproducible bioinformatics pipeline for the analysis of single-cell RNA sequencing (scRNA-seq) data. It processes raw 10x Genomics count data from multiple samples, identifies disease-associated cell populations, and performs deep biological characterization using differential expression, pathway enrichment, and cell-cell communication analysis.
 
-This pipeline is built for reproducibility and is designed to be data-agnostic, allowing researchers to apply it to their own single-cell datasets.
+The pipeline is data-agnostic and can be applied to any suitable single-cell dataset.
+
+---
 
 ## Features
 
--   **Automated QC & Pre-processing:** Handles quality control and filtering for multiple 10x Genomics samples.
--   **Robust Data Integration:** Uses the Harmony algorithm to correct for batch effects between samples, creating a unified cellular atlas.
--   **Objective Target Cell Identification:** Employs a quantitative gene signature scoring method to objectively identify cell clusters associated with a user-defined condition.
--   **Deep Biological Characterization:**
-    -   Performs **Differential Gene Expression (DGE)** analysis.
-    -   Runs **Gene Set Enrichment Analysis (GSEA)** to uncover active biological pathways.
-    -   Optionally attempts a per-sample **Pseudobulk DGE** for statistical validation.
--   **Interaction Network Mapping:** Infers the cell-cell communication network using Squidpy to understand intercellular signaling.
+* **Automated QC & Pre-processing**
+  Quality control and filtering for multiple 10x Genomics samples.
+
+* **Robust Data Integration**
+  Batch effect correction using the Harmony algorithm to create a unified cellular atlas.
+
+* **Objective Target Cell Identification**
+  Quantitative gene signature scoring to identify disease-associated clusters.
+
+* **Deep Biological Characterization**
+
+  * Differential Gene Expression (DGE)
+  * Gene Set Enrichment Analysis (GSEA)
+  * Optional per-sample pseudobulk DGE
+
+* **Interaction Network Mapping**
+  Cell-cell communication inference using **Squidpy** to explore intercellular signaling.
+
+---
 
 ## Installation
 
-1.  **Clone this repository:**
-    ```bash
-    git clone [URL_to_this_repository]
-    cd scDiscover_Pipeline
-    ```
-2.  **Install Conda:** If you don't have it, install [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-3.  **Create and activate the Conda environment:**
-    ```bash
-    conda env create -f environment.yml
-    conda activate scdiscover_env
-    ```
-    This command creates an environment named `scdiscover_env` and installs all required packages.
+### 1. Clone the repository
+
+```bash
+git clone [URL_to_this_repository]
+cd scDiscover_Pipeline
+```
+
+### 2. Install Conda
+
+If not already installed, download [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+
+### 3. Create and activate the environment
+
+```bash
+conda env create -f environment.yml
+conda activate scdiscover_env
+```
+
+---
 
 ## Usage
 
-### 1. Data Input
+### 1. Prepare Your Data
 
-The user must provide their own data in two parts:
+#### A. Raw Count Data
 
-**A. Raw Count Data:**
-Place your 10x Genomics `filtered_feature_bc_matrix` directories inside the `/data` folder. The structure should be:
+Place each 10x Genomics `filtered_feature_bc_matrix` folder under the `/data` directory:
 
+```
 data/
-├── [Sample_1_Folder_Name]/
-│ └── filtered_feature_bc_matrix/
-│ ├── barcodes.tsv.gz
-│ ├── features.tsv.gz
-│ └── matrix.mtx.gz
-├── [Sample_2_Folder_Name]/
-│ └── ...
-└── ...
+├── Sample_1/
+│   └── filtered_feature_bc_matrix/
+│       ├── barcodes.tsv.gz
+│       ├── features.tsv.gz
+│       └── matrix.mtx.gz
+├── Sample_2/
+│   └── ...
+```
 
+#### B. Metadata File
 
-**B. Metadata File:**
-Create a CSV file and place it in the `/metadata` directory. An example `sample_metadata.csv` is provided. The file **must** have the following columns:
--   `Library ID`: The exact name of the sample folder in the `/data` directory.
--   `Sample ID`: A unique identifier for the sample/patient.
--   `Condition`: A column describing the biological group (e.g., 'Disease', 'Control', 'Treatment', 'Pre-treatment').
+Place a CSV file in the `/metadata` directory. Use the provided `sample_metadata.csv` as a template. Required columns:
+
+* **Library ID**: Matches folder name under `/data`
+* **Sample ID**: Unique identifier
+* **Condition**: Biological group (e.g., "Disease", "Control")
+
+---
 
 ### 2. Configuration
 
-Before running, you must configure the key parameters at the top of the `scripts/01_process_and_integrate.py` and `scripts/02_identify_and_characterize.py` files. This includes setting the metadata file path, the condition column name, the "case" vs "control" labels, and the gene signature for your disease of interest.
+Edit the following files before execution:
 
-### 3. Running the Pipeline
+* `scripts/01_process_and_integrate.py`
+* `scripts/02_identify_and_characterize.py`
 
-Execute the scripts from the main `scDiscover_Pipeline/` directory in order.
+Update key parameters:
 
-**Script 1: Process and Integrate**
-This script reads all raw data, performs QC, integrates the samples, performs clustering, and saves a final, processed AnnData object.
+* Metadata path
+* Condition column
+* "Case" vs "Control" labels
+* Disease-specific gene signature
+
+---
+
+### 3. Run the Pipeline
+
+#### Step 1: Process and Integrate
 
 ```bash
 python scripts/01_process_and_integrate.py
+```
 
-Output: results/processed_data/final_integrated_with_raw.h5ad
+**Output:**
+`results/processed_data/final_integrated_with_raw.h5ad`
 
-Script 2: Identify and Characterize
-This script loads the integrated data, objectively identifies the primary cluster of interest based on your configuration, performs DGE and GSEA, and attempts a pseudobulk analysis.
-Generated bash
+---
+
+#### Step 2: Identify and Characterize
+
+```bash
 python scripts/02_identify_and_characterize.py
-Use code with caution.
-Bash
-Output: All statistical tables and plots in the /results and /figures directories. It also creates results/target_cluster_id.txt.
-Script 3: Communication Analysis
-This script loads the data, reads the target cluster ID, and runs the final cell-cell communication analysis.
+```
 
+**Output:**
+Statistical tables and plots in `/results` and `/figures`
+Also generates: `results/target_cluster_id.txt`
 
-Output: Squidpy communication plots and tables in the /results and /figures directories.
-Data Availability (Sample Dataset)
-An anonymized sample dataset for demonstration purposes can be made available upon request. Please contact us for more information.
+---
 
+#### Step 3: Communication Analysis
 
-### **3. `environment.yml`**
+```bash
+python scripts/03_run_communication_analysis.py
+```
 
-(Renamed the environment to `scdiscover_env`.)
+**Output:**
+Squidpy plots and communication tables in `/results` and `/figures`
 
-```yml
+---
+
+## Sample Dataset
+
+A demonstration dataset is available upon request. Please contact **[hello@sarovi.pl](mailto:hello@sarovi.pl)**.
+
+---
+
+## environment.yml
+
+```yaml
 name: scdiscover_env
 channels:
   - conda-forge
@@ -118,4 +169,4 @@ dependencies:
       - squidpy==1.2.3
       - harmony-pytorch==0.1.7
       - gseapy==1.0.3
-
+```
