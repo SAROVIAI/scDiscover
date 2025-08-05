@@ -40,7 +40,7 @@ The pipeline is data-agnostic and can be applied to any suitable single-cell dat
 ### 1. Clone the repository
 
 ```bash
-git clone [URL_to_this_repository]
+git clone https://github.com/SAROVIAI/scDiscover
 cd scDiscover_Pipeline
 ```
 
