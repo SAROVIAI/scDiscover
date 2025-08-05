@@ -4,17 +4,11 @@ Create a CSV file and place it in the `/metadata` directory. An example `sample_
 -   `Library ID`: The exact name of the sample folder in the `/data` directory.
 -   `Sample ID`: A unique identifier for the sample/patient.
 -   `Condition`: A column describing the biological group (e.g., 'Disease', 'Control', 'Treatment', 'Pre-treatment').
-
 ### 2. Configuration
-
 Before running, you must configure the key parameters at the top of the `scripts/01_process_and_integrate.py` and `scripts/02_identify_and_characterize.py` files. This includes setting the metadata file path, the condition column name, the "case" vs "control" labels, and the gene signature for your disease of interest.
-
 ### 3. Running the Pipeline
-
 Execute the scripts from the main `scDiscover_Pipeline/` directory in order.
-
 **Script 1: Process and Integrate**
 This script reads all raw data, performs QC, integrates the samples, performs clustering, and saves a final, processed AnnData object.
-
 ```bash
 python scripts/01_process_and_integrate.py
