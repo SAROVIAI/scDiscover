@@ -77,3 +77,45 @@ python scripts/01_process_and_integrate.py
 
 Output: results/processed_data/final_integrated_with_raw.h5ad
 
+Script 2: Identify and Characterize
+This script loads the integrated data, objectively identifies the primary cluster of interest based on your configuration, performs DGE and GSEA, and attempts a pseudobulk analysis.
+Generated bash
+python scripts/02_identify_and_characterize.py
+Use code with caution.
+Bash
+Output: All statistical tables and plots in the /results and /figures directories. It also creates results/target_cluster_id.txt.
+Script 3: Communication Analysis
+This script loads the data, reads the target cluster ID, and runs the final cell-cell communication analysis.
+
+
+Output: Squidpy communication plots and tables in the /results and /figures directories.
+Data Availability (Sample Dataset)
+An anonymized sample dataset for demonstration purposes can be made available upon request. Please contact us for more information.
+
+
+### **3. `environment.yml`**
+
+(Renamed the environment to `scdiscover_env`.)
+
+```yml
+name: scdiscover_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.9
+  - scanpy=1.10.3
+  - pandas=2.2.0
+  - matplotlib
+  - seaborn
+  - anndata=0.10.7
+  - leidenalg
+  - igraph
+  - pip
+  - pip:
+      - pydeseq2==0.4.5
+      - squidpy==1.2.3
+      - harmony-pytorch==0.1.7
+      - gseapy==1.0.3
+
